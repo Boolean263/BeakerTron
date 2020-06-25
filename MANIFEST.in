@@ -1,0 +1,4 @@
+include beakertron/schema.sql
+graft beakertron/static
+graft beakertron/templates
+global-exclude *.pyc

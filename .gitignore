@@ -1,0 +1,23 @@
+# Virtualenv stuff
+venv/
+!venv/pip.conf
+
+# Per-dev environment
+.env
+
+# Compiled python
+*.pyc
+__pycache__/
+
+# Per-dev instance
+instance/
+
+# Test stuff
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Dist stuff
+dist/
+build/
+*.egg-info/
