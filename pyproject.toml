@@ -1,0 +1,30 @@
+[build-system]
+requires = [
+  "poetry_core>=1.0.0",
+]
+build-backend = "poetry.masonry.api"
+
+[tool.poetry]
+name = "beakertron"
+version = "0.0.1"
+description = "Q&A talking-head site software"
+authors = [
+  "David Perry <boolean263@protonmail.com>",
+]
+readme = "README.md"
+license = "GPL-3.0-or-later"
+homepage = "https://github.com/Boolean263/BeakerTron"
+repository = "https://github.com/Boolean263/BeakerTron"
+
+[tool.poetry.dependencies]
+python = "^3.6"
+Flask = "^1.1.2"
+Flask-SQLAlchemy = "^2.4.3"
+python-dotenv = "^0.14.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+coverage = "^5.2"
+
+[tool.poetry.urls]
+issues = "https://github.com/Boolean263/BeakerTron/issues"

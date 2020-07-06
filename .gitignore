@@ -1,6 +1,5 @@
 # Virtualenv stuff
 venv/
-!venv/pip.conf
 
 # Per-dev environment
 .env
