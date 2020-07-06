@@ -1,12 +1,11 @@
 import os
 import tempfile
+from datetime import datetime
 
 import pytest
 from beakertron import create_app
 from beakertron.db import get_db, init_db
-
-with open(os.path.join(os.path.dirname(__file__), 'data.sql'), 'rb') as f:
-    _data_sql = f.read().decode('utf8')
+from beakertron.models import User, Post
 
 
 @pytest.fixture
@@ -15,12 +14,25 @@ def app():
 
     app = create_app({
         'TESTING': True,
-        'DATABASE': db_path,
+        'SQLALCHEMY_DATABASE_URI': "sqlite:///"+db_path,
     })
 
     with app.app_context():
-        init_db()
-        get_db().executescript(_data_sql)
+        db = init_db()
+        db.session.add_all([
+            User(username="test",
+                 password='pbkdf2:sha256:50000$TCI4GzcX$0de171a4f4dac32e3364c7ddc7c14f3e2fa61f2d17574483f7ffbb431b4acb2f'),
+            User(username="other",
+                 password='pbkdf2:sha256:50000$kJPKsz6N$d2d4784f1b030a9761f5ccaeeaca413f27f2ecb76d6168407af962ddce849f79'),
+
+        ])
+        db.session.add(Post(
+            title="test title",
+            body="test\nbody",
+            author_id=1,
+            created=datetime(2018, 1, 1, 0, 0, 0)
+        ))
+        db.session.commit()
 
     yield app
 

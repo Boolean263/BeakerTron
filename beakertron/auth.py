@@ -6,6 +6,7 @@ from flask import (
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from beakertron.db import get_db
+from beakertron.models import User
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -22,17 +23,13 @@ def register():
             error = 'Username is required.'
         elif not password:
             error = 'Password is required.'
-        elif db.execute(
-            'SELECT id FROM user WHERE username = ?', (username,)
-        ).fetchone() is not None:
+        elif User.by_name(username) is not None:
             error = 'User {} is already registered.'.format(username)
 
         if error is None:
-            db.execute(
-                'INSERT INTO user (username, password) VALUES (?, ?)',
-                (username, generate_password_hash(password))
-            )
-            db.commit()
+            u = User(username=username, password=generate_password_hash(password))
+            db.session.add(u)
+            db.session.commit()
             return redirect(url_for('auth.login'))
 
         flash(error)
@@ -47,18 +44,16 @@ def login():
         password = request.form['password']
         db = get_db()
         error = None
-        user = db.execute(
-            'SELECT * FROM user WHERE username = ?', (username,)
-        ).fetchone()
+        user = User.by_name(username)
 
         if user is None:
             error = 'Incorrect username.'
-        elif not check_password_hash(user['password'], password):
+        elif not check_password_hash(user['password'], user.password):
             error = 'Incorrect password.'
 
         if error is None:
             session.clear()
-            session['user_id'] = user['id']
+            session['user_id'] = user.id
             return redirect(url_for('index'))
 
         flash(error)
@@ -69,13 +64,12 @@ def login():
 @bp.before_app_request
 def load_logged_in_user():
     user_id = session.get('user_id')
+    get_db()
 
     if user_id is None:
         g.user = None
     else:
-        g.user = get_db().execute(
-            'SELECT * FROM user WHERE id = ?', (user_id,)
-        ).fetchone()
+        g.user = User.query.get(user_id)
 
 
 @bp.route('/logout')
