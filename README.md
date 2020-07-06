@@ -16,15 +16,21 @@ Don't. It's not ready yet.
 
 BeakerTron is a python project, and uses [poetry](https://python-poetry.org/) to manage its setup and dependencies and whatnot. You should install poetry according to its instructions (though using `pip` works in a pinch).
 
+We also use [pre-commit](https://pre-commit.com/) to enforce our coding standards. You should install that separately too (again, `pip` works).
+
 The easiest way to get going is:
 
     git clone https://github.com/Boolean263/BeakerTron
     cd BeakerTron
+    pre-commit install
     poetry install --no-root
+    poetry shell
 
 To run the software in development mode:
 
     flask run
+
+If you try to commit code that the various pre-commit plugins don't like, they'll abort the commit, but they'll also change the affected files. Review the changes, stage them, and add them to your commit, and you should be good. Or, you can run `pre-commit run --all-files` manually to see what changes it makes without waiting to try and fail a commit.
 
 # Q&A Hall of Fame
 

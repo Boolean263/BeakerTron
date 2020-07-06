@@ -1,0 +1,46 @@
+# This file is used by pre-commit: https://pre-commit.com/
+# It specifies hooks that will be run over files before a commit
+# is allowed to proceed.
+#
+# You should install pre-commit outside of this environment, eg with:
+#   python3 -m pip install --user pre-commit
+# Then, after you check out this repo, run `pre-commit install` to
+# have it install its dependencies and set up its hooks.
+#
+# Now, when you attempt to commit any changes, these hooks will be run.
+# If they find any problems, the commit will be aborted, usually with
+# an error message stating why.
+# In some cases, the hooks may change your files before exiting (eg,
+# trailing-whitespace will remove trailing whitespace). This will still
+# cause the commit to fail, in order to allow you to review the changes
+# (which will *not* be staged in git) to make sure they don't break
+# anything.
+
+default_language_version:
+    python: python3.6
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.3.0
+    hooks:
+    -   id: check-yaml
+    -   id: end-of-file-fixer
+    -   id: trailing-whitespace
+        args:
+          - --markdown-linebreak-ext=md
+    -   id: mixed-line-ending
+        args:
+          - --fix=lf
+-   repo: https://github.com/timothycrosley/isort
+    rev: 4.3.21
+    hooks:
+    -   id: isort
+        additional_dependencies:
+          - toml
+-   repo: https://github.com/python/black
+    rev: 19.10b0
+    hooks:
+    -   id: black
+-   repo: https://gitlab.com/pycqa/flake8
+    rev: 3.7.9
+    hooks:
+    -   id: flake8
